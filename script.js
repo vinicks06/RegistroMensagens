@@ -13,4 +13,14 @@ async function registerLog(studentName) {
     return id;
 }
 
-module.exports = { registerLog };
+async function findLogById(id) {
+    try {
+        const logs = await fs.readFile(LOG_FILE, 'utf-8');
+        const lines = logs.split('\n');
+        return lines.find(line => line.startsWith(id));
+    } catch (error) {
+        return null;
+    }
+}
+
+module.exports = { registerLog, findLogById };
