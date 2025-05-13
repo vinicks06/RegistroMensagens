@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerLog } = require('./script');
+const { registerLog, findLogById } = require('./script');
 const app = express();
 
 app.use(express.json());
@@ -18,6 +18,21 @@ app.post('/logs', async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ error: 'Erro ao registrar log' });
+    }
+});
+
+app.get('/logs/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const logEntry = await findLogById(id);
+        
+        if (!logEntry) {
+            return res.status(404).json({ error: 'Log não encontrado' });
+        }
+
+        res.json({ log: logEntry });
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao buscar log' });
     }
 });
 
